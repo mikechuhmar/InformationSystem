@@ -3,33 +3,57 @@ int = integer
 intlist = int*
 
 predicates
+%Добавить все элементы одного списка в конец другого
 append(intlist, intlist, intlist)
+%Длина списка
 len(intlist, int)
+%Циклический сдвиг влево
 cyclicShiftLeft(intlist, int, intlist)
+%Циклический сдвиг вправо
 cyclicShiftRight(intlist, int, intlist)
+%Количество элементов в списке, значения которых лежат в диапазоне
 lengthInRange(intlist, int, int, int)
+%Входит ли элемент в список
 enter(int, intlist)
+%Являются ли элементы списка подмножеством элементов другого списка
 subset(intlist, intlist)
 
 clauses
+%Добавление элементов в пустой список
 append([], L, L).
+%Добавление элементов в непустой список
 append([X|M], L, [X|N]):- append(M, L, N).
+%Длина пустого списка
 len([], 0).
+%Длина непустого списка
 len([_|T], N):- len(T, N1), N = N1 + 1.
+%Циклический сдвиг влево в пустом списке
 cyclicShiftLeft([], _, []).
+%Циклический сдвиг влево в непустом списке на 0 элементов
 cyclicShiftLeft(L, 0, L):-!.
+%Циклический сдвиг влево в непустом списке на N элементов
 cyclicShiftLeft([H|T], N, Res):- append(T, [H], Temp), N1 = N - 1, cyclicShiftLeft(Temp, N1, Res).
+%Циклический сдвиг вправо в непустом списке на N элементов
+%Производится при помощи применения циклического сдвига влево на число элементов равное модулю разности 
+%длины списка и количества элементов, на которое нужно сдвинуть вправо
 cyclicShiftRight(L, N, Res):- len(L, Length), Nl = abs(Length - N), cyclicShiftLeft(L, Nl, Res).
+%Количество элементов в пустом списке, значения которых лежат в диапазоне
 lengthInRange([], _, _, 0).
+%Количество элементов в непустом списке, значения которых лежат в диапазоне
 lengthInRange([H|T], Min, Max, N):- H > Min, H < Max, lengthInRange(T, Min, Max, N1), N = N1 + 1; 
 				    H <= Min, lengthInRange(T, Min, Max, N1), N = N1; 
 				    H >= Max, lengthInRange(T, Min, Max, N1), N = N1.
+%Элемент входит в список, если является его головой
 enter(X, [X|T]).
+%Входит ли элемент в список
 enter(X, [Y|T]):- enter(X, T).
+%Пустой список является подмножеством другого списка
 subset([], _).
+%Являются ли элементы непустого списка подмножеством элементов другого списка
 subset([H|T], L):- enter(H, L), subset(T, L).
 
 goal
-%cyclicShiftRight([3,4,5,1,2], 1, List).
+%cyclicShiftRight([], 2, List).
+cyclicShiftRight([3,1,2], 2, List).
 %lengthInRange([3, 2], 1, 4, N).
-subset([1, 5], [1, 2, 3]).
+%subset([1, 5], [1, 2, 3]).
