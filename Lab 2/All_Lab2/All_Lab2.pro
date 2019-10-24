@@ -54,6 +54,10 @@ subset([H|T], L):- enter(H, L), subset(T, L).
 
 goal
 %cyclicShiftRight([], 2, List).
-cyclicShiftRight([3,1,2], 2, List).
-%lengthInRange([3, 2], 1, 4, N).
-%subset([1, 5], [1, 2, 3]).
+%cyclicShiftRight([3,1,2], 2, List).
+%lengthInRange([], 1, 4, N).
+%lengthInRange([4, 2], 1, 4, N).
+%subset([], [1, 2, 3]).
+%subset([1,3], [1, 2, 3]).
+%subset(L, [1, 2, 3]).
+lengthInRange([5, 3], A, 10, 1).
