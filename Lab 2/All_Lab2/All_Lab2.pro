@@ -15,8 +15,16 @@ cyclicShiftRight(intlist, int, intlist)
 lengthInRange(intlist, int, int, int)
 %Входит ли элемент в список
 enter(int, intlist)
+%Список без повторений
+distinct(intlist, intlist)
 %Являются ли элементы списка подмножеством элементов другого списка
 subset(intlist, intlist)
+%Являются ли элементы списка подмножеством элементов другого списка без повторений
+subsetDistinct(intlist, intlist).
+takeout(int, intlist, intlist)
+permutation(intlist, intlist)
+unorderedSubsetDistinct(intlist, intlist).
+subset1(intlist, intlist).
 
 clauses
 %Добавление элементов в пустой список
@@ -40,24 +48,41 @@ cyclicShiftRight(L, N, Res):- len(L, Length), Nl = abs(Length - N), cyclicShiftL
 %Количество элементов в пустом списке, значения которых лежат в диапазоне
 lengthInRange([], _, _, 0).
 %Количество элементов в непустом списке, значения которых лежат в диапазоне
-lengthInRange([H|T], Min, Max, N):- H > Min, H < Max, lengthInRange(T, Min, Max, N1), N = N1 + 1; 
+lengthInRange([H|T], Min, Max, N):- H < Max, H > Min, lengthInRange(T, Min, Max, N1), N = N1 + 1,
 				    H <= Min, lengthInRange(T, Min, Max, N1), N = N1; 
 				    H >= Max, lengthInRange(T, Min, Max, N1), N = N1.
+%lengthInRange([H|T], Min, Max, N):- lengthInRange(T, Min, Max, N1), N = N1.
+
 %Элемент входит в список, если является его головой
-enter(X, [X|T]).
+enter(X, [X|T]):-!.
 %Входит ли элемент в список
 enter(X, [Y|T]):- enter(X, T).
+%Список без повторений
+distinct([], []).
+distinct([H1|T1], [H1|T2]):- not(enter(H1, T1)), distinct(T1, T2).
+distinct([H1|T1], L2):- enter(H1, T1), distinct(T1, L2).
 %Пустой список является подмножеством другого списка
 subset([], _).
 %Являются ли элементы непустого списка подмножеством элементов другого списка
-subset([H|T], L):- enter(H, L), subset(T, L).
+subset([H1|T1], [H1|T2]) :- subset(T1, T2), not(enter(H1, T1)).
+subset([H1|T1], [_|T2]) :- subset([H1|T1], T2), not(enter(H1, T1)).
+subsetDistinct(L1, L2) :- distinct(L2, NL2), subset(L1, NL2).
+takeout(H1,[H1|T],T). 
+takeout(H1,[H2|T2],[H2|T3]) :- takeout(H1,T2, T3). 
+permutation([],[]).
+%permutation([H1], [H1]):-!.
+permutation([H1|T1],L2) :- permutation(T1,L3), takeout(H1,L2,L3). 
+unorderedSubsetDistinct(L1, L2) :- len(L2, N2), permutation(L1, PL1), len(PL1, PN1), PN1 >= 0, PN1 <= N2,  subsetDistinct(PL1, L2).
+subset1([], _).
+subset1([H1|T1],L2):- enter(H1, L2), not(enter(H1, T1)), subset1(T1, L2).
 
 goal
 %cyclicShiftRight([], 2, List).
 %cyclicShiftRight([3,1,2], 2, List).
 %lengthInRange([], 1, 4, N).
-%lengthInRange([4, 2], 1, 4, N).
+%lengthInRange([3, 2], 1, 4, N).
 %subset([], [1, 2, 3]).
 %subset([1,3], [1, 2, 3]).
 %subset(L, [1, 2, 3]).
-lengthInRange([5, 3], A, 10, 1).
+subsetDistinct(L, [1, 2, 4, 3]).
+%subsetDistinct([1, 2], [1, 2, 4, 3, 3]).
