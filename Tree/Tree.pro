@@ -14,6 +14,7 @@ max(integer, integer, integer)
 depth(treetype, integer)
 %Подсчет количества вершин бинарного дерева, значения которых равны 0
 countVerticesZeroVals(treetype, integer)
+%count(treetype, integer)
 
 
 clauses
@@ -37,10 +38,10 @@ depth(tree(_, empty, empty), 1):-!.
 depth(tree(_, Left, Right), Depth):- depth(Left, LDepth), depth(Right, RDepth), max(LDepth, RDepth, M), Depth = M + 1.
 %Количество вершин со значениием 0 в пустом дереве
 countVerticesZeroVals(empty, 0).
-%Количество вершин со значениием 0 в дереве с одной вершиной
 countVerticesZeroVals(tree(Root, Left, Right), N):- Root = 0, countVerticesZeroVals(Left, LN), countVerticesZeroVals(Right, RN), N = LN + RN +1,!.
-%Количество вершин со значениием 0 в дереве
 countVerticesZeroVals(tree(Root, Left, Right), N):- countVerticesZeroVals(Left, LN), countVerticesZeroVals(Right, RN), N = LN + RN.
+%count(empty, 0):-!.
+%count(tree(_, Left, Right), N):- count(Left, LN), count(Right, RN), N = LN + RN +1.
 
 
 
@@ -49,7 +50,7 @@ countVerticesZeroVals(tree(Root, Left, Right), N):- countVerticesZeroVals(Left, 
 goal
 %print_tree(tree(2, tree(3, empty, empty), tree(4, empty, empty))).
 %sumAndCountLeafVertices(tree(2, tree(3, tree(5, empty, empty), tree(6, empty, empty)), tree(4, empty, empty)), Sum, Count).
-%averageLeafVertices(tree(2, tree(3, tree(5, empty, empty), tree(6, empty, empty)), tree(4, empty, empty)), Avg).
+averageLeafVertices(tree(2, tree(3, tree(5, empty, empty), tree(6, empty, empty)), tree(4, empty, empty)), Avg).
 %averageLeafVertices(tree(2,  empty, empty), Avg).
 %max(3, 2, Res).
 %depth(tree(2, tree(3, tree(5, empty, empty), tree(6, empty, empty)), tree(4, empty, empty)), Depth).
@@ -57,7 +58,7 @@ goal
 %depth(empty, Depth).
 %countVerticesZeroVals(empty, N).
 %countVerticesZeroVals(tree(0, empty, empty), N).
-countVerticesZeroVals(tree(0, tree(4, tree(5, empty, empty), tree(0, empty, empty)), tree(0, empty, empty)), N).
-
+%countVerticesZeroVals(tree(0, tree(4, tree(5, empty, empty), tree(0, empty, empty)), tree(0, empty, empty)), N).
+%count(T, 3).
 
 
