@@ -86,5 +86,4 @@ goal
 %subset([1,3], [1, 2, 3]).
 %subset([1, 2, X, 3], [1, 2, 4, 3]).
 %subsetDistinct(L, [1, 2, 3, 3]).
-subsetDistinct([1, 2, 4, 3], [1, 2, X, 3]).
-%unorderedSubsetDistinct(L, [1, 2, 4, 3, 3]).
+subsetDistinct([1, 2, 4, 3], [1, 2, 4, 3]).
